@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package com.example.grpc.server.spring.boot.app.stock;
+
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+service StockQuoteProvider {
+
+  rpc getStockQuote(Stock) returns (StockQuote) {}
+
+  rpc getStocksQuote(Stocks) returns (StockQuote) {}
+
+  rpc getListStockQuotes(Stock) returns (StockQuotes) {}
+
+  rpc getListStocksQuotes(Stocks) returns (StockQuotes) {}
+
+  rpc serverSideStreamingGetListStockQuotes(Stock) returns (stream StockQuote) {}
+
+  rpc clientSideStreamingGetStatisticsOfStocks(stream Stock) returns (StockQuote) {}
+
+  rpc bidirectionalStreamingGetListsStockQuotes(stream Stock) returns (stream StockQuote) {}
+
+}
+
+message Stock {
+  reserved 1, 4, 6 to 9;
+  reserved "old_field";
+  string ticker_symbol = 2;
+  string company_name = 3;
+  string description = 5;
+}
+
+message StockQuote {
+  double price = 1;
+  int32 offer_number = 2;
+  optional string description = 3;
+}
+
+message StockQuotes {
+  repeated StockQuote stockQuotes = 1;
+}
+
+message Stocks {
+  repeated Stock stock = 1;
+}
+
+enum Color {
+  RED = 0;
+  GREEN = 1;
+  BLUE = 2;
+}
+
+message SomeMessage {
+  string field = 1;
+
+  message NestedMessage {
+    string field = 1;
+    google.protobuf.Timestamp timestamp = 2;
+  }
+}
+
+message OneOfExample {
+  oneof numbers {
+    int32 integer = 1;
+    double dbl = 2;
+  }
+}
